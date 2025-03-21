@@ -39,8 +39,9 @@
                 <th>Kategorie</th>
                 <th>Wiki</th>
                 <th>YouTube</th>
+                <th>Info</th>
             </tr>
-        </thead>
+        </thead>        
         <tbody></tbody>
     </table>
 
@@ -52,8 +53,8 @@
         function parseCSV(text) {
             const rows = text.trim().split("\n").slice(1); // erste Zeile = Header
             return rows.map(row => {
-                const [name, kategorie, wiki, youtube] = row.split(",");
-                return { name, kategorie, wiki, youtube };
+                const [name, kategorie, wiki, youtube, info] = row.split(",");
+                return { name, kategorie, wiki, youtube, info };
             });
         }
 
@@ -69,8 +70,8 @@
                         <td>${eintrag.kategorie}</td>
                         <td>${eintrag.wiki ? `<a href="${eintrag.wiki}" target="_blank">Wiki</a>` : '-'}</td>
                         <td>${eintrag.youtube ? `<a href="${eintrag.youtube}" target="_blank">YouTube</a>` : '-'}</td>
+                        <td>${eintrag.info || '-'}</td>
                     `;
-
                     tableBody.appendChild(row);
                 });
 
