@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Team Kreuzberg Mod-Übersicht</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 300px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>CSV-Tabelle durchsuchen</h1>
+    <input type="text" id="searchInput" placeholder="Nach Mod suchen...">
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Kategorie</th>
+                <th>Wiki</th>
+                <th>YouTube</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const searchInput = document.getElementById("searchInput");
+        const tableBody = document.querySelector("#dataTable tbody");
+
+        // Funktion zum Parsen von CSV
+        function parseCSV(text) {
+            const rows = text.trim().split("\n").slice(1); // erste Zeile = Header
+            return rows.map(row => {
+                const [name, kategorie, wiki, youtube] = row.split(",");
+                return { name, kategorie, wiki, youtube };
+            });
+        }
+
+        // Funktion zum Laden der CSV-Datei
+        fetch("daten.csv")
+            .then(response => response.text())
+            .then(data => {
+                const eintraege = parseCSV(data);
+                eintraege.forEach(eintrag => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${eintrag.name}</td>
+                        <td>${eintrag.kategorie}</td>
+                        <td>${eintrag.wiki ? `<a href="${eintrag.wiki}" target="_blank">Wiki</a>` : '-'}</td>
+                        <td>${eintrag.youtube ? `<a href="${eintrag.youtube}" target="_blank">YouTube</a>` : '-'}</td>
+                    `;
+
+                    tableBody.appendChild(row);
+                });
+
+                // Suche aktivieren
+                searchInput.addEventListener("input", () => {
+                    const filter = searchInput.value.toLowerCase();
+                    const rows = tableBody.querySelectorAll("tr");
+                    rows.forEach(row => {
+                        const name = row.cells[0].textContent.toLowerCase();
+                        row.style.display = name.includes(filter) ? "" : "none";
+                    });
+                });
+            })
+            .catch(error => console.error("Fehler beim Laden der CSV:", error));
+    </script>
+
+</body>
+</html>
