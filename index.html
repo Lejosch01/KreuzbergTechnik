@@ -40,6 +40,7 @@
                 <th>Wiki</th>
                 <th>YouTube</th>
                 <th>Info</th>
+                <th>Ingame Doku</th>
             </tr>
         </thead>        
         <tbody></tbody>
@@ -53,8 +54,8 @@
         function parseCSV(text) {
             const rows = text.trim().split("\n").slice(1); // erste Zeile = Header
             return rows.map(row => {
-                const [name, kategorie, wiki, youtube, info] = row.split(",");
-                return { name, kategorie, wiki, youtube, info };
+                const [name, kategorie, wiki, youtube, info, doku] = row.split(",");
+                return { name, kategorie, wiki, youtube, info, doku };
             });
         }
 
@@ -71,6 +72,7 @@
                         <td>${eintrag.wiki ? `<a href="${eintrag.wiki}" target="_blank">Wiki</a>` : '-'}</td>
                         <td>${eintrag.youtube ? `<a href="${eintrag.youtube}" target="_blank">YouTube</a>` : '-'}</td>
                         <td>${eintrag.info || '-'}</td>
+                        <td>${eintrag.doku || '-'}</td>
                     `;
                     tableBody.appendChild(row);
                 });
